@@ -5,6 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Insulin Simulation Lab</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      @keyframes pulse-soft {
+        0%,
+        100% {
+          transform: scale(1);
+          opacity: 0.9;
+        }
+        50% {
+          transform: scale(1.08);
+          opacity: 1;
+        }
+      }
+
+      .particle-pulse {
+        animation: pulse-soft 1.6s ease-in-out infinite;
+      }
+    </style>
   </head>
   <body class="min-h-screen bg-slate-100 text-slate-900">
     <main class="mx-auto w-full max-w-6xl px-4 py-8 md:px-6">
@@ -34,6 +51,7 @@
               name="name"
               type="text"
               autocomplete="name"
+              aria-describedby="name-error"
               placeholder="Enter your name"
               class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm outline-none transition focus:border-slate-500 focus:ring-2 focus:ring-slate-200"
               required
@@ -55,6 +73,7 @@
               name="email"
               type="email"
               autocomplete="email"
+              aria-describedby="email-error"
               placeholder="Enter your email"
               class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm outline-none transition focus:border-slate-500 focus:ring-2 focus:ring-slate-200"
               required
@@ -116,7 +135,10 @@
                 <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-rose-700">
                   Blood Vessel
                 </p>
-                <div id="blood-sugar-particles" class="min-h-20"></div>
+                <div
+                  id="blood-sugar-particles"
+                  class="min-h-20 rounded-lg bg-rose-100/60 p-2"
+                ></div>
               </div>
 
               <div class="my-4 flex items-center justify-center">
@@ -216,6 +238,10 @@
                   <dd id="metric-uptake" class="font-semibold">0 mg/dL</dd>
                 </div>
               </dl>
+              <p class="mt-4 rounded-lg bg-slate-50 p-3 text-xs text-slate-600">
+                Tip: Increase insulin to trigger receptor binding, then monitor blood sugar
+                transfer into the cell.
+              </p>
             </div>
           </aside>
         </div>
