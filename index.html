@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Insulin Simulation Lab</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="min-h-screen bg-slate-100 text-slate-900">
+    <main class="mx-auto w-full max-w-6xl px-4 py-8 md:px-6">
+      <header class="mb-8">
+        <h1 class="text-2xl font-bold md:text-3xl">Insulin Simulation Lab</h1>
+        <p class="mt-2 text-sm text-slate-600 md:text-base">
+          Learn how insulin helps cells absorb sugar from blood vessels.
+        </p>
+      </header>
+
+      <section
+        id="onboarding-section"
+        class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm md:p-8"
+      >
+        <h2 class="text-xl font-semibold">Start Simulation</h2>
+        <p class="mt-1 text-sm text-slate-600">
+          Fill in your details to enter the learning lab.
+        </p>
+
+        <form id="onboarding-form" class="mt-6 space-y-4" novalidate>
+          <div>
+            <label for="learner-name" class="mb-1 block text-sm font-medium"
+              >Name</label
+            >
+            <input
+              id="learner-name"
+              name="name"
+              type="text"
+              autocomplete="name"
+              placeholder="Enter your name"
+              class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm outline-none transition focus:border-slate-500 focus:ring-2 focus:ring-slate-200"
+              required
+            />
+            <p
+              id="name-error"
+              class="mt-1 hidden text-xs font-medium text-rose-600"
+            >
+              Name is required.
+            </p>
+          </div>
+
+          <div>
+            <label for="learner-email" class="mb-1 block text-sm font-medium"
+              >Email</label
+            >
+            <input
+              id="learner-email"
+              name="email"
+              type="email"
+              autocomplete="email"
+              placeholder="Enter your email"
+              class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm outline-none transition focus:border-slate-500 focus:ring-2 focus:ring-slate-200"
+              required
+            />
+            <p
+              id="email-error"
+              class="mt-1 hidden text-xs font-medium text-rose-600"
+            >
+              Please enter a valid email address.
+            </p>
+          </div>
+
+          <button
+            type="submit"
+            class="inline-flex items-center rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-700"
+          >
+            Enter Lab
+          </button>
+        </form>
+      </section>
+
+      <section id="simulation-section" class="hidden space-y-6">
+        <div
+          class="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm md:flex-row md:items-center md:justify-between md:p-6"
+        >
+          <div>
+            <p class="text-sm text-slate-500">Learner</p>
+            <p id="learner-name-display" class="text-lg font-semibold">-</p>
+          </div>
+          <button
+            id="reset-session-btn"
+            type="button"
+            class="inline-flex w-fit items-center rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100"
+          >
+            Change User
+          </button>
+        </div>
+
+        <div class="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+          <div
+            class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm md:p-6"
+          >
+            <div class="mb-4 flex items-center justify-between">
+              <h2 class="text-lg font-semibold">Visual Simulation</h2>
+              <span
+                id="binding-status"
+                class="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800"
+                >Insulin not bound</span
+              >
+            </div>
+
+            <div
+              class="relative overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 p-4"
+            >
+              <div
+                id="blood-vessel"
+                class="relative rounded-2xl border-2 border-rose-200 bg-rose-50 p-4"
+              >
+                <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-rose-700">
+                  Blood Vessel
+                </p>
+                <div id="blood-sugar-particles" class="min-h-20"></div>
+              </div>
+
+              <div class="my-4 flex items-center justify-center">
+                <div class="h-10 w-1 rounded bg-slate-300"></div>
+              </div>
+
+              <div
+                id="cell-area"
+                class="rounded-full border-4 border-cyan-300 bg-cyan-100 p-8 text-center"
+              >
+                <p class="text-xs font-semibold uppercase tracking-wide text-cyan-800">
+                  Cell
+                </p>
+                <p class="mt-2 text-sm text-cyan-900">
+                  Receptors:
+                  <span id="receptor-count" class="font-semibold">0</span>
+                </p>
+                <p class="mt-1 text-sm text-cyan-900">
+                  Sugar absorbed:
+                  <span id="cell-sugar-value" class="font-semibold">0 mg/dL</span>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <aside class="space-y-6">
+            <div
+              class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm md:p-6"
+            >
+              <h2 class="text-lg font-semibold">Controls</h2>
+              <div class="mt-5 space-y-5">
+                <div>
+                  <label for="insulin-slider" class="mb-2 block text-sm font-medium"
+                    >Insulin Level</label
+                  >
+                  <input
+                    id="insulin-slider"
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="20"
+                    class="w-full accent-cyan-600"
+                  />
+                  <p class="mt-1 text-sm text-slate-600">
+                    Current:
+                    <span id="insulin-value" class="font-semibold">20</span>
+                    units
+                  </p>
+                </div>
+
+                <div>
+                  <label
+                    for="blood-sugar-slider"
+                    class="mb-2 block text-sm font-medium"
+                    >Blood Sugar Concentration</label
+                  >
+                  <input
+                    id="blood-sugar-slider"
+                    type="range"
+                    min="70"
+                    max="280"
+                    value="110"
+                    class="w-full accent-rose-600"
+                  />
+                  <p class="mt-1 text-sm text-slate-600">
+                    Current:
+                    <span id="blood-sugar-value" class="font-semibold">110</span>
+                    mg/dL
+                  </p>
+                </div>
+
+                <button
+                  id="eat-btn"
+                  type="button"
+                  class="inline-flex items-center rounded-xl bg-rose-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-rose-700"
+                >
+                  Eat (+ Blood Sugar)
+                </button>
+              </div>
+            </div>
+
+            <div
+              class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm md:p-6"
+            >
+              <h2 class="text-lg font-semibold">Live Metrics</h2>
+              <dl class="mt-4 space-y-3 text-sm">
+                <div class="flex items-center justify-between">
+                  <dt class="text-slate-600">Blood Sugar</dt>
+                  <dd id="metric-blood-sugar" class="font-semibold">110 mg/dL</dd>
+                </div>
+                <div class="flex items-center justify-between">
+                  <dt class="text-slate-600">Insulin Level</dt>
+                  <dd id="metric-insulin" class="font-semibold">20 units</dd>
+                </div>
+                <div class="flex items-center justify-between">
+                  <dt class="text-slate-600">Cell Sugar Uptake</dt>
+                  <dd id="metric-uptake" class="font-semibold">0 mg/dL</dd>
+                </div>
+              </dl>
+            </div>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
